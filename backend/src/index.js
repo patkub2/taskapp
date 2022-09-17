@@ -54,8 +54,13 @@ const resolvers = {
     myTaskList: () => [],
   },
   Mutation: {
-    signUp: (_, data) => {
-      console.log(data);
+    signUp: (_, { input }) => {
+      const hashedPass = bcrypt.hashSync(input.password);
+      const user = {
+        ...input,
+        password: hashedPass,
+      };
+      const result = db.collection("Users").insert(user);
     },
     signIn: (_, data) => {
       console.log(data);
