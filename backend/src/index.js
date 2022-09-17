@@ -6,7 +6,7 @@ const { DB_URI, DB_NAME } = process.env;
 const {
   ApolloServerPluginLandingPageLocalDefault,
 } = require("apollo-server-core");
-
+const bcrypt = require("bcryptjs");
 const typeDefs = gql`
   type Query {
     myTaskList: [TaskList!]!
@@ -60,6 +60,9 @@ const resolvers = {
     signIn: (_, data) => {
       console.log(data);
     },
+  },
+  User: {
+    id: ({ _id, id }) => _id || id,
   },
 };
 
