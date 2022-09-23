@@ -11,12 +11,6 @@ const typeDefs = gql`
   type Query {
     myTaskList: [TaskList!]!
   }
-  type User {
-    id: ID!
-    name: String!
-    email: String!
-    avatar: String
-  }
 
   type Mutation {
     signUp(
@@ -28,9 +22,15 @@ const typeDefs = gql`
     signIn(email: String!, password: String!): AuthUser!
   }
   type AuthUser {
-    user: User!
     token: String!
   }
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+    avatar: String
+  }
+
   type TaskList {
     id: ID!
     createdAt: String!
@@ -54,16 +54,25 @@ const resolvers = {
     myTaskList: () => [],
   },
   Mutation: {
-    signUp: (_, { input }) => {
-      const hashedPass = bcrypt.hashSync(input.password);
-      const user = {
-        ...input,
+    signUp: async (_, data, { db }) => {
+      //console.log(data);
+
+      const hashedPass = bcrypt.hashSync(data.password);
+
+      const newUser = {
+        ...data,
         password: hashedPass,
       };
-      const result = db.collection("Users").insert(user);
+      //console.log(newUser);
+      const result = await db.collection("Users").insertOne(newUser);
+      //const user = result.ops[0];
+      console.log(result);
+      return {
+        token: "token",
+      };
     },
     signIn: (_, data) => {
-      console.log(data);
+      console.log(data.input);
     },
   },
   User: {
