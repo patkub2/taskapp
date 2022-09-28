@@ -15,6 +15,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.2",
     "graphql": "^16.6.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.9.1"
   }
 }
