@@ -2,11 +2,17 @@ const { ApolloServer, gql } = require("apollo-server");
 const dotenv = require("dotenv");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 dotenv.config();
-const { DB_URI, DB_NAME } = process.env;
+const { DB_URI, DB_NAME, JWT_SECRET } = process.env;
 const {
   ApolloServerPluginLandingPageLocalDefault,
 } = require("apollo-server-core");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+
+///////////
+const getToken = (user) =>
+  jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "30 days" });
+
 const typeDefs = gql`
   type Query {
     myTaskList: [TaskList!]!
@@ -68,7 +74,7 @@ const resolvers = {
       //const user = result.ops[0];
       console.log(result);
       return {
-        token: "token",
+        token: getToken(user),
       };
     },
     signIn: async (_, data, { db }) => {
@@ -81,7 +87,7 @@ const resolvers = {
       }
 
       return {
-        token: "token",
+        token: getToken(user),
       };
       //console.log(data.input);
     },
