@@ -115,7 +115,11 @@ const start = async () => {
     csrfPrevention: true,
     cache: "bounded",
     plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
-    context,
+    context: ({ req }) => {
+      return {
+        db,
+      };
+    },
   });
 
   // The `listen` method launches a web server.
