@@ -83,10 +83,11 @@ const resolvers = {
       };
       //console.log(newUser);
       const result = await db.collection("Users").insertOne(newUser);
+
       //  const user = result.user;
-      console.log(result[0]);
+      console.log(newUser);
       return {
-        token: getToken(result),
+        token: getToken(newUser),
       };
     },
     signIn: async (_, data, { db }) => {
